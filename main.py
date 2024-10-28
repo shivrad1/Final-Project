@@ -7,10 +7,12 @@ video = cv2.VideoCapture(0)
 while True:
     #fetch webcam video
     success, img = video.read()
-    image = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     #show webcam
     cv2.imshow("webcam", img)
+    print(gray_image.shape)
+
 
     #stop program when i press q
     if cv2.waitKey(1) & 0xFF == ord('q'):
