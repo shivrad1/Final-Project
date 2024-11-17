@@ -10,6 +10,9 @@ video.set(4, 480)
 
 #face recognizer, OpenCVs model
 recognizer = cv2.face.LBPHFaceRecognizer_create()
+#pull in trainer model file
+recognizer.read('trainer.yml')
+print(recognizer)
 
 #path for face detection
 face_cascade_path = "haarcascade_frontalface_default.xml"
@@ -18,6 +21,13 @@ faceCascade = cv2.CascadeClassifier(face_cascade_path)
 
 #font
 font = cv2.FONT_HERSHEY_SIMPLEX
+
+#converts json file of names to a list that can be referenced later
+id = 0
+names = ['None']
+with open('names.json', 'r') as fs:
+    names = json.load(fs)
+    names = list(names.values())
 
 #min width and height for window size to be recognized as a face
 minW = 0.1 * video.get(3)
@@ -37,9 +47,24 @@ while True:
         minNeighbors = 5,
         minSize=(int(minW), int(minH)),
     )
+
+    
     
     for (x, y, w, h) in faces:
-        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+        #draws rectangle aroudn the face
+        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
+        #predicts user ID and confidence level using recognizer program
+        id, confidence = recognizer.predict(gray_image[y:y + h, x:x + w])
+
+        if confidence > 51:
+            name = names[id]
+            confidence = "  {0}%".format(round(confidence))"
+        else:
+            name = "Who are you?"
+            confidence = "N/A"
+        
 
     #show webcam
     cv2.imshow("webcam", img)

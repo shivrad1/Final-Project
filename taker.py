@@ -36,6 +36,7 @@ def save_name(face_id: int, face_name: str, filename: str) -> None:
         json_dump = json.dumps(names_json, ensure_ascii=False, indent=4)
         fs.write(json_dump)
 
+#only run when executed directly
 if __name__ == '__main__':
     directory = 'images'
     cascade_classifier_filename = 'haarcascade_frontalface_default.xml'
