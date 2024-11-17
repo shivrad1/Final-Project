@@ -59,12 +59,19 @@ while True:
         id, confidence = recognizer.predict(gray_image[y:y + h, x:x + w])
 
         if confidence > 51:
-            name = names[id]
-            confidence = "  {0}%".format(round(confidence))"
+            try:
+                name = names[id]
+                confidence = "  {0}%".format(round(confidence))
+            except IndexError as e:
+                name = "Who are you?"
+                confidence = "N/A"
         else:
             name = "Who are you?"
             confidence = "N/A"
         
+        #display the recognized name and confidence level
+        cv2.putText(img, name, (x + 5, y - 5), font, 1, (255, 255, 255), 2)
+        cv2.putText(img, confidence, (x + 5, y + h - 5), font, 1, (255, 255, 0), 1)
 
     #show webcam
     cv2.imshow("webcam", img)
